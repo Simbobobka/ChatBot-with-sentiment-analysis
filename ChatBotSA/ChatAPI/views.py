@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from textblob import TextBlob
 from django.http import JsonResponse
-from django.shortcuts import render
 from openai import OpenAI
 import environ
 
@@ -12,6 +11,9 @@ environ.Env.read_env()
 
 def health_check(request):
     return HttpResponse("The project is still alive")
+
+def welcome(request):
+    return render(request, 'welcome.html')
 
 def analyze_sentiment(user_message):
     blob = TextBlob(user_message)
@@ -26,12 +28,13 @@ def analyze_sentiment(user_message):
     
 
 def get_openai_response(user_message, sentiment):
-    if sentiment == "positive":
-        prompt = f"The user is happy and said: '{user_message}'. Respond in an encouraging way. Also include apropriate emoji"
-    elif sentiment == "negative":
-        prompt = f"The user seems unhappy and said: '{user_message}'. Respond with an apology and offer to help. Also include apropriate emoji"
-    else:
-        prompt = f"The user is neutral and said: '{user_message}'. Ask if there’s any way to assist further. Also include apropriate emoji"    
+    match sentiment:
+        case "positive":
+            prompt = f"The user is happy and said: '{user_message}'. Respond in an encouraging way. Also include apropriate happy emoji"
+        case "negative":
+            prompt = f"The user seems unhappy and said: '{user_message}'. Respond with an apology and offer to help. Also include apropriate unhappy emoji"
+        case _:
+            prompt = f"The user is neutral and said: '{user_message}'. Ask if there’s any way to assist further. Also include apropriate emoji"    
 
     client = OpenAI(
         api_key=env("OPENAI_API_KEY"),
@@ -63,4 +66,5 @@ def chatbot_response(request):
         sentiment = analyze_sentiment(user_message)
         bot_response = get_openai_response(user_message, sentiment)
         return JsonResponse({"response": bot_response})
-    return JsonResponse({"error": "Invalid request"}, status=400)
+
+    return render(request, 'main.html', {"messages": []})
