@@ -38,7 +38,7 @@
         document.getElementById('message-input').value = '';  // Clear input field
     
         // Send the message to the server
-        const response = await fetch("", {
+        const response = await fetch("", { 
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",

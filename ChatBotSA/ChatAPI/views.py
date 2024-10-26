@@ -18,7 +18,7 @@ def welcome(request):
 def analyze_sentiment(user_message):
     blob = TextBlob(user_message)
     sentiment_score = blob.sentiment.polarity
-
+    
     if sentiment_score > 0:
         return "positive"
     elif sentiment_score < 0:
@@ -27,7 +27,7 @@ def analyze_sentiment(user_message):
         return "neutral"
     
 
-def get_openai_response(user_message, sentiment):
+def get_openai_response(user_message, sentiment, interaction_count):
     match sentiment:
         case "positive":
             prompt = f"The user is happy and said: '{user_message}'. Respond in an encouraging way. Also include apropriate happy emoji"
@@ -57,14 +57,28 @@ def get_openai_response(user_message, sentiment):
         max_tokens=50,
         temperature=0.7
     )
-    return response.choices[0].message.content
+
+    bot_response = response.choices[0].message.content
+    print(interaction_count)
+    if interaction_count >= 3:
+        bot_response += " Could you please provide feedback about our conversation?"
+
+    return bot_response
 
 @csrf_exempt
 def chatbot_response(request):
     if request.method == "POST":
         user_message = request.POST.get("message", "")
+
+        if ('interaction_count' not in request.session) or (request.session['interaction_count'] > 2):
+            request.session['interaction_count'] =0
+        
         sentiment = analyze_sentiment(user_message)
-        bot_response = get_openai_response(user_message, sentiment)
+
+        request.session['interaction_count'] += 1
+        interaction_count = request.session['interaction_count']
+
+        bot_response = get_openai_response(user_message, sentiment, interaction_count)
         return JsonResponse({"response": bot_response})
 
     return render(request, 'main.html', {"messages": []})
