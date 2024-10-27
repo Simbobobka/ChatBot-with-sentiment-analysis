@@ -3,7 +3,7 @@
 ## Overview {#intro}
 Based on Django and OpenAI this simple chatbot interacts with users and performs __sentiment analysis__ on the input. The chatbot classify user messages as positive, negative, or neutral and respond accordingly. Furthermore, bot has configurable __memory__ and remembers the context of the conversation for a limited time(you could set memory duration on your own). Also chatbot asks for __feedback__ after each 3 interactions.
 
-![alt text](image.png)
+https://github.com/user-attachments/assets/72c98dd5-8d58-45f5-8f65-d9c99c98a54e
 
 ## Table of content
 - [Overview](#intro)
