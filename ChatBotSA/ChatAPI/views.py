@@ -112,5 +112,4 @@ def chatbot_response(request):
             request.session['messages'].pop(0)
 
         return JsonResponse({"response": bot_response})
-
-    return render(request, "main.html", {"messages": []})
+    return render(request, "main.html", {"messages": request.session.get("messages", [])})

@@ -18,7 +18,9 @@
 <body>
     <div id="chat-container">
         {% for msg in messages %}
-            <div class="message {{ msg.sender }}-message">{{ msg.text }}</div>
+            {% if msg.content %}
+                <div class="message {{ msg.role }}-message">{{ msg.content }}</div>
+            {% endif %}
         {% endfor %}
     </div>
     
