@@ -14,6 +14,7 @@ https://github.com/user-attachments/assets/72c98dd5-8d58-45f5-8f65-d9c99c98a54e
     - [sentimental libraries settings](#step5)
     - [perform migrations](#step6)
     - [run server](#step7)
+- [Run project on docker](#docker)
 - [Technology Stack](#stack)
 - [Additional details](#details) 
 
@@ -91,6 +92,17 @@ Use this command to start local server:
 ```python manage.py runserver```
 
 Visit ```http://127.0.0.1:8000/  ``` to start chating.
+
+## Run project on docker {#docker}
+
+Set up ```.env``` file as in previous steps.
+Perfom this command to build and start container
+
+```docker-compose up -d```
+
+Now you can visit site via this url
+
+```http://localhost:8000```
 
 ## Built with {#stack}
 
